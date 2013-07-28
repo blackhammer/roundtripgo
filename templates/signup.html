@@ -12,57 +12,38 @@
 </head>
   <body>
  <div data-role="page" data-theme="c" id="signup">
+ <div data-role="content">
     <form method="post">
-      <table>
-        <tr>
-          <td class="label">
-            Username
-          </td>
-          <td>
-            <input type="text" name="username" value="${username}">
-          </td>
-          <td class="error">
-            ${usererror}
-          </td>
-        </tr>
+    		<fieldset data-role="fieldcontain">
+				<label for="signupusername">Username:</label>
+				<input type="text" name="username" id="signupusername"value="${username}">
+			</fieldset>
+			<fieldset data-role="fieldcontain">		
+				<label style="color:red;">${usererror}</label>
+			</fieldset>
+			<fieldset data-role="fieldcontain">
+				<label for="signuppassword">Password:</label>
+				<input type="password" id="signuppassword" name="password" value="">							
+			</fieldset>
+			<fieldset data-role="fieldcontain">
+				<label for="signupverify">Verify Password:</label>
+				<input type="password" id="signupverify" name="verify" value="">
+			</fieldset>
+			<fieldset data-role="fieldcontain">		
+				<label style="color:red;">${pwmatcherror}</label>
+			</fieldset>
+			<fieldset data-role="fieldcontain">				
+				<label for="signupemail">Email:</label>
+				<input type="text" name="email" id="signupemail"value="${email}">
+			</fieldset>
+			<fieldset data-role="fieldcontain">		
+				<label style="color:red;">${emailerror}</label>
+			</fieldset> 	              
 
-        <tr>
-          <td class="label">
-            Password
-          </td>
-          <td>
-            <input type="password" name="password" value="">
-          </td>
-          <td class="error">
-            ${pwerror}
-          </td>
-        </tr>
-
-        <tr>
-          <td class="label">
-            Verify Password
-          </td>
-          <td>
-            <input type="password" name="verify" value="">
-          </td>
-          <td class="error">
-            ${pwmatcherror}
-          </td>
-        </tr>
-        <tr>
-          <td class="label">
-            Email (optional)
-          </td>
-          <td>
-            <input type="text" name="email" value="${email}">
-          </td>
-          <td class="error">
-            ${emailerror}
-          </td>
-        </tr>
-      </table>
+        
       <input type="submit" value="Signup!">
     </form>
+    </div>
     </div>
 	</body>
 </html>
