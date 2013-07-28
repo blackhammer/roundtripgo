@@ -6,7 +6,7 @@ from datetime import *
 import logging
 
 
-class RoundTripDataManager():
+class ExcursionDataManager():
 	def __init__(self):
 		pass
 		
