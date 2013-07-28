@@ -41,6 +41,9 @@ class SignUpHandler(webapp2.RequestHandler):
 		verify 	= self.request.get('verify')
 		email 	= self.request.get('email')
 		
+		user = user.lower()
+		email = email.lower()
+		
 		#validate
 		usermatch	= self.validate_user(user)
 		passwdmatch	= self.validate_passwd(passwd)
