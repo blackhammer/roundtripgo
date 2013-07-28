@@ -44,8 +44,7 @@ class HomeHandler(webapp2.RequestHandler):
 			userid = usercookie.split('|')[0]
 			user = User.get_by_id(int(userid))
 			if user:
-				excursionList = ExcursionDataManager().get_trip_list(userid)
-				
+				excursionList = ExcursionDataManager().get_trip_list(int(userid))				
 				
 				path = os.path.join(os.path.dirname(__file__), '../pages/index.html')
 				template = Template(filename=path)

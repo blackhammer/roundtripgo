@@ -21,11 +21,12 @@
 		<form method="post" action="/newexcursion">
 			<fieldset data-role="fieldcontain">
 				<label for="excursiontitle">Title:</label>
-				<input type="text" name="Title" id="excursiontitle"value="">
+				<input type="text" name="title" id="excursiontitle"value="">
 			</fieldset>			
 			<fieldset data-role="fieldcontain">
 				<label for="excursiondesc">Password:</label>
-				<input type="text" id="excursiondesc" name="Description" value="">							
+				<input type="text" id="excursiondesc" name="description" value="">	
+				<input type="hidden" name="userid" value="${userid}">						
 			</fieldset>			   
       	<input type="submit" value="save">
    	</form>

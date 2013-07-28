@@ -22,7 +22,7 @@
 	<div class="choice_list"> 
 	<ul data-role="listview" data-inset="true" >		
 		% for item in excursions:
-    		<li>Test</li>
+    		<li><a href="/viewexcursion/${item.key().id()}" data-transition="slide">${item.Title}</a></li>
 		% endfor
 	</ul>
 </div>

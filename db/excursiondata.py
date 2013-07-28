@@ -18,12 +18,11 @@ class ExcursionDataManager():
 		if entries is not None and not update:			
 			return entries
 		else:			
-			entries = db.GqlQuery("SELECT * from Trip WHERE UserId = :1 ORDER BY Created DESC", user_id)			
-			logging.error("gqlQueried - userid: %s " % user_id)
-			logging.error("gqlQueried - trip count: %s " % len(entries))
-										
-			entries = list(entries)			
-			memcache.set(key_trips, entries)			
+			entries = db.GqlQuery("SELECT * from Trip WHERE UserId = :1 ORDER BY Created DESC", user_id)													
+			entries = list(entries)		
+			
+			if len(entries) > 0:		
+				memcache.set(key_trips, entries)			
 								
 			return entries
 	
@@ -31,26 +30,22 @@ class ExcursionDataManager():
 	def get_trip_items(self, tripId, update = False):
 		key_trips = "trip_items_%s" % (tripId)		
 		
-		entry = memcache.get(key_trips)
+		entries = memcache.get(key_trips)
 		
-		if entry is not None and not update:						
-			return entry
+		if entries is not None and not update:						
+			return entries
 		else:			
-			entry = db.GqlQuery("SELECT * from TripItem WHERE TripId = :1 ORDER BY Version DESC", trip_id)
-			
-			if entry.count() >= 1:
-				entry = entry[0]				
-				memcache.set(key_post,entry)								
-				return entry
-			else:
-				return None		
-			
+			entries = db.GqlQuery("SELECT * from TripItem WHERE TripId = :1 ORDER BY Version DESC", trip_id)			
+			entries = list(entries)
+						
+			if entries.count() > 0:							
+				memcache.set(key_trips,entry)
+												
+			return entries				
 			
 	def add_trip(self, userid, title, description):
 		if userid and title:		
-			Trip(UserId = userid, Title = title, Description = description).put()
-		
-		
+			Trip(UserId = userid, Title = title, Description = description).put()					
 			
 	def add_trip_item(self, tripid, title, apiId):
 		if	tripid and title and apiId:
