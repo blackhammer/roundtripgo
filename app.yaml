@@ -1,4 +1,4 @@
-application: roundtripgo
+application: excursiongo
 version: 1
 runtime: python27
 api_version: 1
@@ -14,6 +14,12 @@ handlers:
   
 - url: /templates
   static_dir: templates
+  
+- url: /css
+  static_dir: css
+  
+- url: /js
+  static_dir: js
      
 - url: /.*
   script: main.app
