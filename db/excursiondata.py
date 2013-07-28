@@ -11,7 +11,7 @@ class ExcursionDataManager():
 		pass
 		
 	#Return the list of trips for a User
-	def trip_list(self, user_id, update = False):
+	def get_trip_list(self, user_id, update = False):
 		key_trips = "user_trips_%s" % user_id 		
 		entries = memcache.get(key_trips)
 		
@@ -19,7 +19,9 @@ class ExcursionDataManager():
 			return entries
 		else:			
 			entries = db.GqlQuery("SELECT * from Trip WHERE UserId = :1 ORDER BY Created DESC", user_id)			
-							
+			logging.error("gqlQueried - userid: %s " % user_id)
+			logging.error("gqlQueried - trip count: %s " % len(entries))
+										
 			entries = list(entries)			
 			memcache.set(key_trips, entries)			
 								
@@ -50,8 +52,8 @@ class ExcursionDataManager():
 		
 		
 			
-	def add_trip_item(self, tripid, title, apiId)
-		if	tripid, title, apiId:
+	def add_trip_item(self, tripid, title, apiId):
+		if	tripid and title and apiId:
 			TripItem(TripId = tripid, Title = title, ApiId = apiId).put()		
 			
 class Trip(db.Model):

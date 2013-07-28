@@ -13,6 +13,7 @@ sys.path.append("../mako")
 sys.path.append("../markupsafe")
 
 from usermanager import *
+from excursiondata import *
 import webapp2
 from mako.template import Template
 
@@ -43,11 +44,12 @@ class HomeHandler(webapp2.RequestHandler):
 			userid = usercookie.split('|')[0]
 			user = User.get_by_id(int(userid))
 			if user:
-				#excursions = self.get_user_excursions(userid)
+				excursionList = ExcursionDataManager().get_trip_list(userid)
+				
 				
 				path = os.path.join(os.path.dirname(__file__), '../pages/index.html')
 				template = Template(filename=path)
-				response = template.render(username=user.UserName)
+				response = template.render(username=user.UserName, excursions=excursionList)
 				self.response.out.write(response)
 			else:
 				self.redirect("/login")			
