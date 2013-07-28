@@ -29,6 +29,7 @@ class LoginHandler(webapp2.RequestHandler):
 		valid_cookie = cookieValidator.validate_cookie(usercookie)
 		
 		if valid_cookie:
+			self.response.headers["Location"] = "/home"
 			self.redirect("/home")
 		else:
 			self.write_form()

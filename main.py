@@ -24,6 +24,7 @@ sys.path.append("./home")
 import webapp2
 import os  
 from home import *
+from newexcursion import *
 from signup.signup import *
 from signup.login import *
 
@@ -52,7 +53,8 @@ class MainHandler(webapp2.RequestHandler):
                               
 PAGE_RE = r'(/(?:[a-zA-Z0-9_-]+/?)*)'
 app = webapp2.WSGIApplication([('/home', HomeHandler),
-										 ('/signup', SignUpHandler),
+										 ('/newexcursion', NewExcursionHandler),
+										 ('/signup', SignUpHandler),										 
                                ('/login', LoginHandler),
                                ('/logout', LogoutHandler),                               
                                ('/', MainHandler),
