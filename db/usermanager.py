@@ -5,7 +5,6 @@ from google.appengine.api import memcache
 from datetime import *
 import logging
 
-
 class User(db.Model):
 	UserName = db.StringProperty(required=True)
 	Password = db.StringProperty(required=True)

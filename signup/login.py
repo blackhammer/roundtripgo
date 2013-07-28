@@ -5,22 +5,33 @@ import re
 import hashlib
 import random
 import string
-
-from google.appengine.ext import db
-from usermanager import *
-
-from mako.template import Template
-
 import sys
-import os
 sys.path.append("../db") 
 sys.path.append("../mako")
 sys.path.append("../markupsafe") 
+sys.path.append("../home")  
+
+from google.appengine.ext import db
+from usermanager import *
+from home import *
+
+from mako.template import Template
+
+
+import os
 
 
 class LoginHandler(webapp2.RequestHandler):
 	def get(self):
-		self.write_form()
+		usercookie = self.request.cookies.get('user_id', '0')
+		cookieValidator = AuthenticationManager()
+		
+		valid_cookie = cookieValidator.validate_cookie(usercookie)
+		
+		if valid_cookie:
+			self.redirect("/home")
+		else:
+			self.write_form()
 		
 	def post(self):
 		username	= self.request.get('username')

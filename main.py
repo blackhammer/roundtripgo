@@ -31,8 +31,16 @@ from signup.login import *
 
 class MainHandler(webapp2.RequestHandler):
 	def get(self):
-		template = self.load_template()
-		self.response.out.write(template)
+		usercookie = self.request.cookies.get('user_id', '0')
+		cookieValidator = AuthenticationManager()
+		
+		valid_cookie = cookieValidator.validate_cookie(usercookie)
+		
+		if valid_cookie:
+			self.redirect("/home")
+		else:
+			template = self.load_template()
+			self.response.out.write(template)
 
 	def load_template(self):		
 		path = os.path.join(os.path.dirname(__file__), './pages/default.html')

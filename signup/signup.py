@@ -120,37 +120,5 @@ class SignUpHandler(webapp2.RequestHandler):
 		if passwd == verify:
 			return verify
 		else:
-			return None
-	
-class WelcomeHandler(webapp2.RequestHandler):
-	def get(self):
-		usercookie = self.request.cookies.get('user_id', '0')
-		validcookie = self.validate_cookie(usercookie)
-		
-		if validcookie:
-			userid = usercookie.split('|')[0]
-			user = User.get_by_id(int(userid))
-			if user:
-				self.response.out.write("<h2>Welcome, %(username)s</h2>" % {"username":user.UserName})
-			else:
-				self.redirect("/signup")		
-		#go back to signup otherwise
-		else:
-			self.redirect("/signup")
-		
-	def validate_cookie(self, cookie):
-		tokens = cookie.split('|')
-		if len(tokens) > 1:
-			userid = tokens[0]
-			cookiehash = tokens[1]
-			user = User.get_by_id(int(userid))
+			return None	
 
-			hash = hashlib.sha256(user.UserName + user.Salt).hexdigest()
-		
-			if hash == cookiehash:
-				return True
-			else:
-				return False
-		else:
-			return False
-			
