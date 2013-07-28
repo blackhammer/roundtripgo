@@ -25,20 +25,30 @@ class ExcursionDataManager():
 				memcache.set(key_trips, entries)			
 								
 			return entries
+			
+	def get_trip(self, user_id, trip_id):
+		tripItems = self.get_trip_list(user_id)
+		
+		matches = [trip for trip in tripItems if trip.key().id() == trip_id]
+		
+		if matches and len(matches) > 0:
+			return matches[0]
+		else:
+			return None
 	
 	#Get the list of trip items for a given user and trip id
-	def get_trip_items(self, tripId, update = False):
-		key_trips = "trip_items_%s" % (tripId)		
+	def get_trip_items(self, trip_id, update = False):
+		key_trips = "trip_items_%s" % (trip_id)		
 		
 		entries = memcache.get(key_trips)
 		
 		if entries is not None and not update:						
 			return entries
 		else:			
-			entries = db.GqlQuery("SELECT * from TripItem WHERE TripId = :1 ORDER BY Version DESC", trip_id)			
+			entries = db.GqlQuery("SELECT * from TripItem WHERE TripId = :1 ORDER BY Version DESC", int(trip_id))			
 			entries = list(entries)
 						
-			if entries.count() > 0:							
+			if len(entries) > 0:							
 				memcache.set(key_trips,entry)
 												
 			return entries				

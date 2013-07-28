@@ -25,6 +25,7 @@ import webapp2
 import os  
 from home import *
 from newexcursion import *
+from viewexcursion import *
 from signup.signup import *
 from signup.login import *
 
@@ -54,6 +55,7 @@ class MainHandler(webapp2.RequestHandler):
 PAGE_RE = r'(/(?:[a-zA-Z0-9_-]+/?)*)'
 app = webapp2.WSGIApplication([('/home', HomeHandler),
 										 ('/newexcursion', NewExcursionHandler),
+										 ('/viewexcursion/(\d+)', ViewExcursionHandler),
 										 ('/signup', SignUpHandler),										 
                                ('/login', LoginHandler),
                                ('/logout', LogoutHandler),                               

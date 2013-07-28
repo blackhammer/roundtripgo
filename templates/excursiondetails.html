@@ -11,18 +11,19 @@
 <script src="js/jquery.mobile-1.0.1.min.js"></script>
 </head>
 <body>
-<div data-role="page" data-url="/home" data-theme="c" id="logout">
+<div data-role="page" data-add-back-btn="true" data-url="/viewexcursion" data-theme="c" id="logout">
 <div data-role="header"> 
-<h2>Welcome, ${username}</h2>
+<h2>${excursiontitle}</h2>
 <a class="ui-btn-right" href="/logout" >Logout</a>
 </div>
 <div data-role="content">
-	<a href="/newexcursion" data-role="button">New</a> 
+	<a href="/newexcursion" data-role="button">+</a> 
 	<hr/>
+	
 	<div class="choice_list"> 
 	<ul data-role="listview" data-inset="true" >		
-		% for item in excursions:
-    		<li><a href="/viewexcursion/${item.key().id()}" data-transition="slide">${item.Title}</a></li>
+		% for item in tripItems:
+    		<li><a href="/viewexcursionitem/${item.key().id()}" data-transition="slide">${item.Title}</a></li>
 		% endfor
 	</ul>
 </div>
