@@ -11,6 +11,9 @@ handlers:
    
 - url: /flush.*
   script: .wiki.newpost.app  
+  
+- url: /templates
+  static_dir: templates
      
 - url: /.*
   script: main.app

@@ -33,7 +33,7 @@ class LoginHandler(webapp2.RequestHandler):
 			if passhash == user.Password:				
 				usercookie = '%d|%s' % (user.key().id(),hashlib.sha256(user.UserName + user.Salt).hexdigest())
 				self.response.headers.add_header('Set-Cookie', 'user_id=%s; Path=/'% usercookie) 
-				self.redirect("/")
+				self.redirect("/home")
 		
 		self.write_form(username,"Invalid login")
 		

@@ -14,12 +14,39 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
+import sys
+sys.path.append("./signup")
+sys.path.append("./yellow/business")
+sys.path.append("./db")
+sys.path.append("./home")  
+
 import webapp2
+import os  
+from home import *
+from signup.signup import *
+from signup.login import *
+
+
 
 class MainHandler(webapp2.RequestHandler):
-    def get(self):
-        self.response.write('Hello world!')
+	def get(self):
+		template = self.load_template()
+		self.response.out.write(template)
 
-app = webapp2.WSGIApplication([
-    ('/', MainHandler)
-], debug=True)
+	def load_template(self):		
+		path = os.path.join(os.path.dirname(__file__), './pages/default.html')
+		template = Template(filename=path)
+		
+		return template.render()
+    
+
+                              
+PAGE_RE = r'(/(?:[a-zA-Z0-9_-]+/?)*)'
+app = webapp2.WSGIApplication([('/home', HomeHandler),
+										 ('/signup', SignUpHandler),
+                               ('/login', LoginHandler),
+                               ('/logout', LogoutHandler),                               
+                               ('/', MainHandler),
+                               ],
+                              debug=True)

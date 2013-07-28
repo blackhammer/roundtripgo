@@ -7,128 +7,28 @@ import random
 import string
 
 from google.appengine.ext import db
-from wikidata import *
+from usermanager import *
+
+from mako.template import Template
 
 import sys
+import os
 sys.path.append("../db") 
-
-loginform="""
-<html>
-	<head>
-		<title>Login</title>
-		 <style type="text/css">
-      .label {text-align: right}
-      .error {color: red}
-    </style>
-	</head>
-	<body>
-		<h2>Login</h2>
-		<form method="post">
-      <table>
-        <tr>
-          <td class="label">
-            Username
-          </td>
-          <td>
-            <input type="text" name="username" value="%(username)s">
-          </td>          
-        </tr>
-        <tr>
-          <td class="label">
-            Password
-          </td>
-          <td>
-            <input type="password" name="password" value="">
-          </td>          
-        </tr>
-        <tr>
-        	 <td class="error">
-        	 	%(loginerror)s
-        	 </td>
-        	</tr>
-      </table>
-      <input type="submit" value="login">
-    </form>
-	</body>
-</html>
-"""
-
-signupform="""
-<html>
-  <head>
-    <title>Sign Up</title>
-    <style type="text/css">
-      .label {text-align: right}
-      .error {color: red}
-    </style>
-  </head>
-  <body>
- <h2>Signup</h2>
-    <form method="post">
-      <table>
-        <tr>
-          <td class="label">
-            Username
-          </td>
-          <td>
-            <input type="text" name="username" value="%(username)s">
-          </td>
-          <td class="error">
-            %(usererror)s
-          </td>
-        </tr>
-
-        <tr>
-          <td class="label">
-            Password
-          </td>
-          <td>
-            <input type="password" name="password" value="">
-          </td>
-          <td class="error">
-            %(pwerror)s
-          </td>
-        </tr>
-
-        <tr>
-          <td class="label">
-            Verify Password
-          </td>
-          <td>
-            <input type="password" name="verify" value="">
-          </td>
-          <td class="error">
-            %(pwmatcherror)s
-          </td>
-        </tr>
-        <tr>
-          <td class="label">
-            Email (optional)
-          </td>
-          <td>
-            <input type="text" name="email" value="%(email)s">
-          </td>
-          <td class="error">
-            %(emailerror)s
-          </td>
-        </tr>
-      </table>
-      <input type="submit">
-    </form>
-	</body>
-</html>
-"""
-
-
+sys.path.append("./mako")
+sys.path.append("./markupsafe") 
 
 class SignUpHandler(webapp2.RequestHandler):
 	USER_RE 		= re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
 	PASSWD_RE 	= re.compile(r"^.{3,20}$")
 	EMAIL_RE 	= re.compile(r"^[\S]+@[\S]+\.[\S]+$")
 	
-	def write_form(self,user="",usererror="",pwerror="",pwmatcherror="",email="",emailerror=""):
-		self.response.out.write(signupform % {"username":user,"usererror":usererror,"pwerror":pwerror,\
-		"pwmatcherror":pwmatcherror,"email":email,"emailerror":emailerror})
+	def write_form(self,user="",usernameerror="",passerror="",passmatcherror="",useremail="",useremailerror=""):
+		
+		path = os.path.join(os.path.dirname(__file__), '../pages/signup.html')
+		template = Template(filename=path)
+		response = template.render(username=user,usererror=usernameerror,pwerror=passerror,pwmatcherror=passmatcherror, email=useremail, \
+		emailerror=useremailerror)
+		self.response.out.write(response)
 		
 	
 	def get(self):
@@ -146,7 +46,7 @@ class SignUpHandler(webapp2.RequestHandler):
 		passwdmatch	= self.validate_passwd(passwd)
 		verifymatch	= self.validate_passwd_match(passwd, verify)
 		emailmatch  = self.validate_email(email)
-		userexists = self.user_exists(user)
+		userexists  = self.user_exists(user)
 			
 		if usermatch and passwdmatch and verifymatch and emailmatch and not userexists:
 			id = self.addUser(user, passwd, email)
@@ -254,45 +154,3 @@ class WelcomeHandler(webapp2.RequestHandler):
 		else:
 			return False
 			
-class LoginHandler(webapp2.RequestHandler):
-	def get(self):
-		self.write_form()
-		
-	def post(self):
-		username	= self.request.get('username')
-		passwd 	= self.request.get('password')
-		
-		user = self.get_user(username)
-		
-		if user:
-			passhash = self.validate_passwd(user.UserName, passwd, user.Salt)
-			if passhash == user.Password:				
-				usercookie = '%d|%s' % (user.key().id(),hashlib.sha256(user.UserName + user.Salt).hexdigest())
-				self.response.headers.add_header('Set-Cookie', 'user_id=%s; Path=/'% usercookie) 
-				self.redirect("/")
-		
-		self.write_form(username,"Invalid login")
-		
-	def validate_passwd(self,username, password, salt):    
-	  h = hashlib.sha256(username + password + salt).hexdigest()
-	  return '%s,%s' % (h, salt)	  
-	  
-	def get_user(self, username):
-		query = "SELECT * FROM User WHERE UserName = '%s'" % username
-		users = db.GqlQuery(query)
-		
-		if users.count() == 1:
-			return users[0]
-		else:
-			return None
-		
-	def write_form(self,user="",loginerror=""):
-		self.response.out.write(loginform % {"username":user,"loginerror":loginerror})
-		
-		
-class LogoutHandler(webapp2.RequestHandler):
-	def get(self):
-		self.response.headers.add_header('Set-Cookie', 'user_id=; Path=/') 
-		self.redirect("/")
-	def post(self):
-		pass		

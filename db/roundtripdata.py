@@ -34,57 +34,25 @@ class RoundTripDataManager():
 		if entry is not None and not update:						
 			return entry
 		else:			
-			entry = db.GqlQuery("SELECT * from TripItem WHERE TripId = :1 ORDER BY Version DESC",pagename)
-			#entry = list(entry)						
+			entry = db.GqlQuery("SELECT * from TripItem WHERE TripId = :1 ORDER BY Version DESC", trip_id)
+			
 			if entry.count() >= 1:
-				entry = entry[0]
-				lastupdated = datetime.now()
-				memcache.set(key_post,entry)
-				memcache.set(key_time,lastupdated)
-				return entry, lastupdated
+				entry = entry[0]				
+				memcache.set(key_post,entry)								
+				return entry
 			else:
-				return None, None
-				
-	def get_page_version(self, pagename, version):
-		key_post_version = "version_post_%s_%s" % (pagename, version)
-		key_version_time = "version_post_time%s_%s" % (pagename, version)
-				
-		#logging.error("page: %s,version: %s" % (pagename, version))
-		entry = memcache.get(key_post_version)
+				return None		
+			
+			
+	def add_trip(self, userid, title, description):
+		if userid and title:		
+			Trip(UserId = userid, Title = title, Description = description).put()
 		
-		if entry is not None:
-			#logging.error("cacheHit")
-			lastupdated = memcache.get(key_version_time)
-			return entry, lastupdated
-		else:
-			entry = db.GqlQuery("SELECT * FROM WikiPage WHERE PageName=:1 AND Version=:2",pagename, int(version))
-			#logging.error("gqlQueried")
-			if entry is not None and entry.count()>0:
-				entry = entry[0]
-				lastupdated = datetime.now()
-				memcache.set(key_post_version, entry)
-				memcache.set(key_version_time, lastupdated)
-				return entry, lastupdated
-			else:
-				return None, None
+		
 			
-			
-	def add_page(self, pagename, content):		
-		version = self.page_exists(pagename)
-		if version is None:
-			newpost = WikiPage(PageName = pagename, Content = content,Version = 1)
-			newpost.put()
-		else:
-			newpage = WikiPage(PageName = pagename, Content = content, Version = version+1)
-			newpage.put()			
-	
-	def page_exists(self, pagename):
-		pages, lastupdated = self.page_list()		
-		for page in pages:
-			if page.PageName == pagename:					
-				return page.Version
-		return None
-			
+	def add_trip_item(self, tripid, title, apiId)
+		if	tripid, title, apiId:
+			TripItem(TripId = tripid, Title = title, ApiId = apiId).put()		
 			
 class Trip(db.Model):
 	UserId		= db.IntegerProperty(required=True)
