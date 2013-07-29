@@ -1,0 +1,85 @@
+<!DOCTYPE html> 
+<html> 
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	
+	<title>YellowAPI Sample Application</title>
+	
+	<link rel="stylesheet" href="/static/css/jquery.mobile-1.0b2.css" />
+	<link rel="stylesheet" href="/static/css/style.css" />
+	
+	<script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.0b2/jquery.mobile-1.0b2.min.js"></script>
+</head> 
+
+<body> 
+
+<div data-role="page" data-theme="c">
+
+	<div data-role="header">
+		<h1><img src="/static/img/yellowapi.png" alt="YellowAPI logo" /></h1>
+	</div><!-- /header -->
+
+	<div id="content" data-role="content">
+		<header>
+			<div class="left">
+			<!-- Making sure the information is available -->
+			{% if result.logos.EN %}
+				<img src="{{ result.logos.EN }}" alt="Business logo" />
+			{% else %}
+				{% if result.logos.FR %}
+					<img src="{{ result.logos.FR }}" alt="Business logo" />
+				{% else %}
+					<img src="/static/img/nologo.png" alt="Business logo" />
+				{% endif %}
+			{% endif %}
+			</div>
+			
+			<div class="right">
+				<h1>{{ result.name }}</h1>
+				<p>{{ result.address.street }}</p>
+			</div>
+		</header>
+		
+		<ul data-role="listview" class="actions">
+			<li>
+				<a href="tel:{{ result.phones.0.dispNum }}"><img class="ui-li-icon ui-li-thumb" src="/static/img/phone.png" alt=""/>{{ result.phones.0.dispNum }}</a>
+			</li>
+			
+			<!-- Making sure the information is available -->
+			{% if result.products.webUrl %}
+			<li>
+				<a href="{{ result.products.webUrl.0 }}"><img class="ui-li-icon ui-li-thumb" src="/static/img/globe.png" alt=""/>{{ result.products.webUrl.0 }}</a>
+			</li>
+			{% endif %}
+			
+			<li class="categories">
+				<img class="ui-li-icon ui-li-thumb" src="/static/img/tag.png" alt=""/>Categories
+				<p>
+					{% for item in result.categories %}
+						{{ item.name }}<br />
+					{% endfor %}
+				</p>
+			</li>
+			
+			<!-- Making sure the information is available -->
+			{% if result.geoCode %}
+			<li>
+				<a href="http://maps.google.com/maps?z=16&q={{ result.geoCode.latitude }},{{ result.geoCode.longitude }}"><img class="ui-li-icon ui-li-thumb" src="/static/img/flag.png" alt=""/>Show on map</a>
+			</li>
+			{% endif %}
+		</ul>
+		<br />
+		{% if result.products.dispAd.0 %}
+			<div class="center">
+				<img class="ad" src="{{ result.products.dispAd.0.url }}" alt="advertisment" />
+			</div>
+		{% endif %}
+	</div><!-- /content -->
+	
+</div><!-- /page -->
+
+</body>
+</html>

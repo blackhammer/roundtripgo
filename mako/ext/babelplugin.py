@@ -1,8 +1,13 @@
+# ext/babelplugin.py
+# Copyright (C) 2006-2012 the Mako authors and contributors <see AUTHORS file>
+#
+# This module is part of Mako and is released under
+# the MIT License: http://www.opensource.org/licenses/mit-license.php
+
 """gettext message extraction via Babel: http://babel.edgewall.org/"""
-from StringIO import StringIO
-
 from babel.messages.extract import extract_python
-
+from mako.compat import StringIO
+from mako import compat
 from mako import lexer, parsetree
 
 def extract(fileobj, keywords, comment_tags, options):
@@ -62,6 +67,9 @@ def extract_nodes(nodes, keywords, comment_tags, options):
         if isinstance(node, parsetree.DefTag):
             code = node.function_decl.code
             child_nodes = node.nodes
+        elif isinstance(node, parsetree.BlockTag):
+            code = node.body_decl.code
+            child_nodes = node.nodes
         elif isinstance(node, parsetree.CallTag):
             code = node.code.code
             child_nodes = node.nodes
@@ -69,7 +77,7 @@ def extract_nodes(nodes, keywords, comment_tags, options):
             code = node.body_decl.code
         elif isinstance(node, parsetree.CallNamespaceTag):
             attribs = ', '.join(['%s=%s' % (key, val)
-                                 for key, val in node.attributes.iteritems()])
+                                 for key, val in node.attributes.items()])
             code = '{%s}' % attribs
             child_nodes = node.nodes
         elif isinstance(node, parsetree.ControlLine):
@@ -99,7 +107,7 @@ def extract_nodes(nodes, keywords, comment_tags, options):
             translator_comments = \
                 [comment[1] for comment in translator_comments]
 
-        if isinstance(code, unicode):
+        if not compat.py3k and isinstance(code, compat.text_type):
             code = code.encode('ascii', 'backslashreplace')
         code = StringIO(code)
         for lineno, funcname, messages, python_translator_comments \

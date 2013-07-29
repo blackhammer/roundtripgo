@@ -57,7 +57,7 @@ PAGE_RE = r'(/(?:[a-zA-Z0-9_-]+/?)*)'
 app = webapp2.WSGIApplication([('/home', HomeHandler),
 										 ('/newexcursion', NewExcursionHandler),
 										 ('/viewexcursion/(\d+)', ViewExcursionHandler),
-										 ('/search', SearchPageHandler),
+										 ('/search/(\d+)', SearchPageHandler),
 										 ('/results', SearchResultPageHandler),
 										 ('/signup', SignUpHandler),										 
                                ('/login', LoginHandler),

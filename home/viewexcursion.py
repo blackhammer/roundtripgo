@@ -37,7 +37,7 @@ class ViewExcursionHandler(webapp2.RequestHandler):
 			if excursion:											
 				path = os.path.join(os.path.dirname(__file__), '../pages/excursiondetails.html')
 				template = Template(filename=path)
-				response = template.render(excursiontitle=excursion.Title, tripItems=items)
+				response = template.render(excursiontitle=excursion.Title, tripid=int(id), tripItems=items)
 				self.response.out.write(response)
 		else:
 			self.redirect("/")

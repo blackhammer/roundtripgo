@@ -11,13 +11,13 @@
 <script src="js/jquery.mobile-1.0.1.min.js"></script>
 </head>
 <body>
-<div data-role="page" data-add-back-btn="true" data-url="/viewexcursion" data-theme="c" id="logout">
+<div data-role="page" data-add-back-btn="true" data-url="/viewexcursion/${tripid}" data-theme="c" id="logout">
 <div data-role="header"> 
 <h2>${excursiontitle}</h2>
 <a class="ui-btn-right" href="/logout" >Logout</a>
 </div>
 <div data-role="content">
-	<a href="/search" data-role="button">Search</a> 
+	<a href="/search/${tripid}" data-role="button">Add New Item</a> 
 	<hr/>
 	
 	<div class="choice_list"> 
@@ -29,7 +29,6 @@
     			<h3 class="ui-li-heading">${item.Title} </h3>  							
 				<p class="ui-li-desc">
 				<p class="ui-li-desc">${item.Description}</p>
-				</a>
 			</li>
 		% endfor
 	</ul>

@@ -11,25 +11,20 @@
 <script src="js/jquery.mobile-1.0.1.min.js"></script>
 </head>
 <body>
-<div data-role="page" data-add-back-btn="true" data-url="/search" data-theme="c" id="logout">
+<div data-role="page" data-add-back-btn="true" data-url="/search/${tripid}" data-theme="c" id="logout">
 <div data-role="header"> 
 <h2>Explore</h2>
 <a class="ui-btn-right" href="/logout" >Logout</a>
 </div>
-<div data-role="content">
-	<label for="search-mini">Search Input:</label>
-	<input type="search" name="search-mini" id="search-mini" value="" data-mini="true" />
-	<hr/>
-	
+<div data-role="content">		
 		<form method="post">
 			<fieldset data-role="fieldcontain">
-				<label for="search-mini">Search Input:</label>
-				<input type="search" name="search-mini" id="search-mini" value="" data-mini="true" />
+				<label for="search-mini">Search:</label>
+				<input type="search" name="searchtext" id="search-mini" value="" data-mini="true" />
 			</fieldset>			
 			<fieldset data-role="fieldcontain">
 				<label for="searchlocation">Location:</label>
-				<input type="text" id="searchlocation" name="description" value="">	
-				<input type="hidden" name="userid" value="${userid}">
+				<input type="text" id="searchlocation" name="searchlocation" value="">				
 				<input type="hidden" name="userid" value="${tripid}">							
 			</fieldset>			   
       	<input type="submit" value="Search">
