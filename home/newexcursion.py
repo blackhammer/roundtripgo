@@ -52,4 +52,11 @@ class NewExcursionHandler(webapp2.RequestHandler):
 				#refresh cache
 				datamanager.get_trip_list(int(user_id), True)
 				self.redirect("/home")
+
+class AddExcursionHandler(webapp2.RequestHandler):
+	def get(self):
+		pass
+	
+	def post(self):
+		pass
 			
