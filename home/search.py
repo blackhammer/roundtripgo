@@ -47,18 +47,21 @@ class SearchPageHandler(webapp2.RequestHandler):
 			user_id = usercookie.split('|')[0]
 			keywords	= self.request.get('searchtext')
 			location = self.request.get('searchlocation')
-			tripid	= self.request.get('tripid')
+			
 			
 			yellowAPI 	= YellowAPI('qzd5mb8s9nwdtgptzqcrz2mk', user_id, True, 'JSON', [])
 			results 		= yellowAPI.find_business(keywords, location, 1, 15, '', 'en')
 			
-			if results:
-				#put results in cache
-				
+			if results:							
 				path = os.path.join(os.path.dirname(__file__), '../pages/resultspage.html')
 				template = Template(filename=path)
 				jsonresult = {'result': simplejson.loads(results)}	
-				#logging.error(jsonresult)
+				
+				#put results in cache
+				results_cache_key = "search_results_%s_%s" % (user_id, int(id))
+				memcache.set(results_cache_key, jsonresult)	
+				
+				logging.error(results_cache_key)
 				response = template.render(tripid=int(id),result=jsonresult)
 				self.response.out.write(response)
 			else:
@@ -76,6 +79,21 @@ class SearchResultPageHandler(webapp2.RequestHandler):
 		
 		if valid_cookie:
 			user_id = usercookie.split('|')[0]
+			trip_id = int(id)
+			
+			results_cache_key = "search_results_%s_%s" % (user_id, trip_id)
+			
+			#reload search result from cache
+			jsonresult = memcache.get(results_cache_key)
+			
+			if jsonresult:
+				path = os.path.join(os.path.dirname(__file__), '../pages/resultspage.html')
+				template = Template(filename=path)
+				response = template.render(tripid=trip_id,result=jsonresult)
+				self.response.out.write(response)
+			else:
+				self.redirect("/home")
+				
 			
 		
 	def post(self):

@@ -11,9 +11,10 @@
 </head>
 <body>
 
-<div data-role="page" data-add-back-btn="true" data-url="${targeturl}" data-theme="c">
+<div data-role="page" data-url="${targeturl}" data-theme="c">
 
 	<div data-role="header">
+		<a class="ui-btn-left" href="/results/${tripid}" >Back To Results</a>
 		<h1><img src="/img/yellowapi.png" alt="YellowAPI logo" /></h1>
 		<a class="ui-btn-right" href="/logout" >Logout</a>
 	</div>
@@ -63,7 +64,7 @@
 			% endif
 		</ul>
 		<br />
-		% if result['result']['products']['dispAd'][0]: 
+		% if result['result']['products']['dispAd']: 
 			<div class="center">
 				<img class="ad" src="${ result['result']['products']['dispAd'][0]['url']}" alt="advertisment" />
 			</div>
