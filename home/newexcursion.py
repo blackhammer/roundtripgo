@@ -34,15 +34,22 @@ class NewExcursionHandler(webapp2.RequestHandler):
 				self.response.out.write(response)
 		
 	def post(self):
-		title	= self.request.get('title')
-		desc 	= self.request.get('description')
-		user_id = int(self.request.get('userid'))
+		usercookie = self.request.cookies.get('user_id', '0')
+		cookieValidator = AuthenticationManager()
 		
-		if title and user_id:
-			datamanager = ExcursionDataManager()
-			datamanager.add_trip(user_id, title, desc)
+		valid_cookie = cookieValidator.validate_cookie(usercookie)
+		
+		if valid_cookie:
+			user_id = usercookie.split('|')[0]
+			title	= self.request.get('title')
+			desc 	= self.request.get('description')
 			
-			#refresh cache
-			datamanager.get_trip_list(user_id, True)
-			self.redirect("/home")
+		
+			if title and user_id:
+				datamanager = ExcursionDataManager()
+				datamanager.add_trip(int(user_id), title, desc)
+			
+				#refresh cache
+				datamanager.get_trip_list(int(user_id), True)
+				self.redirect("/home")
 			

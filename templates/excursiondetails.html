@@ -17,13 +17,20 @@
 <a class="ui-btn-right" href="/logout" >Logout</a>
 </div>
 <div data-role="content">
-	<a href="/newexcursion" data-role="button">+</a> 
+	<a href="/search" data-role="button">Search</a> 
 	<hr/>
 	
 	<div class="choice_list"> 
 	<ul data-role="listview" data-inset="true" >		
 		% for item in tripItems:
-    		<li><a href="/viewexcursionitem/${item.key().id()}" data-transition="slide">${item.Title}</a></li>
+    		<li  class="ui-li ui-li-static ui-btn-up-c ui-li-last">
+    			<a href="/viewexcursionitem/${item.key().id()}" data-transition="slide">
+    			<p class="ui-li-aside ui-li-desc">	
+    			<h3 class="ui-li-heading">${item.Title} </h3>  							
+				<p class="ui-li-desc">
+				<p class="ui-li-desc">${item.Description}</p>
+				</a>
+			</li>
 		% endfor
 	</ul>
 </div>
