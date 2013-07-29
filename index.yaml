@@ -19,5 +19,11 @@ indexes:
 - kind: TripItem
   properties:
   - name: TripId
+  - name: Created
+    direction: desc
+
+- kind: TripItem
+  properties:
+  - name: TripId
   - name: Version
     direction: desc

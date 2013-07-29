@@ -54,8 +54,25 @@ class NewExcursionHandler(webapp2.RequestHandler):
 				self.redirect("/home")
 
 class AddExcursionHandler(webapp2.RequestHandler):
-	def get(self):
-		pass
+	def get(self, id):
+		usercookie = self.request.cookies.get('user_id', '0')
+		cookieValidator = AuthenticationManager()
+		
+		valid_cookie = cookieValidator.validate_cookie(usercookie)
+		
+		if valid_cookie:
+			user_id 	= usercookie.split('|')[0]
+			tripid	= int(id)
+			busid		= int(self.request.get('bus_id'))
+			busname 	= self.request.get('bus_name')
+			
+			if busid and busname and tripid:
+				datamanager = ExcursionDataManager()
+				datamanager.add_trip_item(tripid, busname, busid)
+			
+				#refresh cache
+				datamanager.get_trip_items(tripid, True)
+				self.redirect("/results/%s" % tripid)
 	
 	def post(self):
 		pass

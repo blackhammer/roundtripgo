@@ -45,11 +45,11 @@ class ExcursionDataManager():
 		if entries is not None and not update:						
 			return entries
 		else:			
-			entries = db.GqlQuery("SELECT * from TripItem WHERE TripId = :1 ORDER BY Version DESC", int(trip_id))			
+			entries = db.GqlQuery("SELECT * from TripItem WHERE TripId = :1 ORDER BY Created DESC", int(trip_id))			
 			entries = list(entries)
 						
 			if len(entries) > 0:							
-				memcache.set(key_trips,entry)
+				memcache.set(key_trips,entries)
 												
 			return entries				
 			
@@ -69,7 +69,7 @@ class Trip(db.Model):
 	
 
 class TripItem(db.Model):
-	TripId	= db.StringProperty(required=True)	#Trip this item is associated with
+	TripId	= db.IntegerProperty(required=True)	#Trip this item is associated with
 	Title		= db.StringProperty(required=True)	#Name of place, event, etc
 	ApiId		= db.IntegerProperty(required=True)	#Business Id (YellowApi)
 	Created 	= db.DateTimeProperty(auto_now_add = True)
