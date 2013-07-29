@@ -37,6 +37,7 @@ class LoginHandler(webapp2.RequestHandler):
 		username	= self.request.get('username')
 		passwd 	= self.request.get('password')
 		
+		
 		user = self.get_user(username)
 		
 		if user:
@@ -53,7 +54,8 @@ class LoginHandler(webapp2.RequestHandler):
 	  return '%s,%s' % (h, salt)	  
 	  
 	def get_user(self, username):
-		query = "SELECT * FROM User WHERE UserName = '%s'" % username
+		user = username.lower()
+		query = "SELECT * FROM User WHERE UserName = '%s'" % user
 		users = db.GqlQuery(query)
 		
 		if users.count() == 1:
