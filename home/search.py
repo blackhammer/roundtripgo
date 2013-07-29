@@ -48,14 +48,14 @@ class SearchPageHandler(webapp2.RequestHandler):
 			tripid	= self.request.get('tripid')
 			
 			yellowAPI 	= YellowAPI('qzd5mb8s9nwdtgptzqcrz2mk', 'RoundTripGo', True, 'JSON', [])
-			results 		= yellowAPI.find_business(keywords, location, 1, 40, '', 'en')
+			results 		= yellowAPI.find_business(keywords, location, 1, 15, '', 'en')
 			
 			if results:
 				path = os.path.join(os.path.dirname(__file__), '../pages/resultspage.html')
 				template = Template(filename=path)
 				jsonresult = {'result': simplejson.loads(results)}	
 				#logging.error(jsonresult)
-				response = template.render(result=jsonresult)
+				response = template.render(tripid=int(id),result=jsonresult)
 				self.response.out.write(response)
 			else:
 				self.redirect("/home")
